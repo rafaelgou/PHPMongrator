@@ -42,7 +42,9 @@ any PDO supported RDBMs (and with some efforts, even other non-PDO RDBMs).
 
 ## Install
 
-    wget -c http://
+Get the last version on Github Downloads
+
+    wget -c https://github.com/downloads/rafaelgou/PHPMongrator/PHPMongration_1.0.0.tar.gz
     tar xzvf PHPMongration_1.0.0.tar.gz
 
 ## TODO
