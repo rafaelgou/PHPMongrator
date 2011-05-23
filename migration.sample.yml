@@ -1,0 +1,96 @@
+# Default config
+default:
+
+  # Keep or not source pk columns on target database
+  # TODO !! Not implemented yet!
+  keep_source_pk_columns: false
+
+  # Default typecasting. Options:
+  # tostring  => all unknow types are imported as string
+  # discover  => try to discover the type if possible
+  # TODO Mysql ok, e outros?
+  typecasting: tostring
+
+  # Use or not MongoDBRef
+  # if false, just store plain ID
+  use_dbrefs: true
+
+  # Drop database before import
+  # REALLY DANGER!!!
+  drop_database_first: false
+  
+  # Tables to not import - usefull to ignore relation tables 
+  # that will be referenced or embbeded
+  # use [ ] and not { } !!
+  ignore_tables: [ ]
+
+# Database source, in a PDO Format, plus "driver" infor
+source:
+  driver:   'mysql'
+  dsn:      'mysql:host=localhost;dbname=sample'
+  user:     'sampleuser'
+  password: 'samplepassword'
+  options:
+   "PDO::MYSQL_ATTR_INIT_COMMAND": "SET NAMES utf8"
+   "PDO::ATTR_PERSISTENT": true
+
+# Target database, MongoDB format
+# but always inform "database" separated
+target:
+  server:   'mongodb://localhost:27017'
+  database: 'sampledb'
+# optional, if not set, not used
+#    user:     'sampleuser'
+#    password: 'samplepassword'
+  options:
+    persist: true
+#      replicaSet: false
+
+tables:
+
+  # This is a sample table 'blog'
+  blog:
+    # target to migrate data. If ommited, default to table name
+    collection_target: blog
+
+    # Primary key column(s). If
+    # just on colunm
+    pk_columns: id
+    # multiple pk columns
+    #pk_columns: []
+
+    # Keep or not source pk columns on target database (overrides default)
+    # TODO !! Not implemented yet!
+    keep_source_pk_columns: false
+
+    # Columns to ignore on migration
+    # none
+    ignore_columns: ~
+    # or
+    #ignore_columns: [birthday,obs]
+
+    # Mapping columns names and type
+    # Format:
+    # source_column_name: {name: target_column_name, source_type: date, target_type: date}
+    # If a field is ommited will be ignored
+    columns_map:
+      author_name: { target_name: authorname, source_type: string, target_type: string }
+      date_publish: { target_name: datepublish, source_type: date, target_type: date }
+
+    # Embbeding
+    # TODO !! Not implemented yet!
+    embeddeds: ~
+
+    # One to One Referencing
+    one_references:
+      author_id: { table: author, pk: id }
+
+    # One to Many Referencing
+    many_references:
+      readers:
+        reference_table: blog_readers
+        in_id: blog_id
+        out_id: blog_id
+        out_table: reader
+        out_table_id: id
+

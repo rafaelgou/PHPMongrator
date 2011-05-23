@@ -1,0 +1,3 @@
+[submodule "lib/vendor/sfYaml"]
+	path = lib/vendor/sfYaml
+	url = https://github.com/fabpot/yaml.git
