@@ -1,19 +1,19 @@
 # PHPMigration
 
-PHP Classes and CLI scripts to migrate from RDBMs (such as MySQL) to MongoDB
+PHP Classes and CLI scripts to migrate from RDBMSs (such as MySQL) to MongoDB
 
 ## Motivation
 
-As I started using MongoDB, I had not found tools to migrate data from RDBMs to MongoDB.
+As I started using MongoDB, I had not found tools to migrate data from RDBMSs to MongoDB.
 So I decided to make this simple but useful tool.
 
 Initial support to only MySQL, but anyone can extends PHPMongrationDriver to support
-any PDO supported RDBMs (and with some efforts, even other non-PDO RDBMs).
+any PDO supported RDBMSs (and with some efforts, even other non-PDO RDBMSs).
 
 ## Features
 
 - Runs migration through a config file using YAML format (very simple to edit)
-- To start the config, has a php-cli dumper that reads the de RDBM and create
+- To start the config, has a php-cli dumper that reads the RDBMS and create
   a config file to begin
 - Support to datatype mapping (really imports date, boolean, integer, float and string BSON types)
 - Support to simple foreign keys relations
@@ -23,17 +23,27 @@ any PDO supported RDBMs (and with some efforts, even other non-PDO RDBMs).
 
 ## Requirements
 
-- PDO driver for the desired RDBM (current only supports MySQL)
-- PHP Cli extension
-  see: <http://php.net/cli>
-  or for Debian/Ubuntu users:
+- PDO driver for the desired RDBMS (current only supports MySQL)
+-   PHP Cli extension
+
+    see: <http://php.net/cli>
+
+    or for Debian/Ubuntu users:
+
+.
 
     apt-get install php5-cli
 
-- PHP MongoDB extension
-  see: <http://www.mongodb.org/display/DOCS/PHP+Language+Center>
-  or see: <http://www.php.net/manual/en/mongo.installation.php>
-  or for Debian/Ubuntu users:
+
+-   PHP MongoDB extension
+
+    see: <http://www.mongodb.org/display/DOCS/PHP+Language+Center>
+
+    or see: <http://www.php.net/manual/en/mongo.installation.php>
+
+    or for Debian/Ubuntu users:
+
+.
 
     apt-get -y install python-software-properties
     add-apt-repository ppa:chris-lea/mongodb-drivers
@@ -55,7 +65,7 @@ Get the last version on Github Downloads
 
 ## Dumper (runDumper.php)
 
-Used to dump a basic config based on the RDBM. Current support only to MySQL.
+Used to dump a basic config based on the RDBMS. Current support only to MySQL.
 
 runDumper.php is a interactive command line script. Run like this:
 
@@ -93,30 +103,30 @@ Read to understand the options.
 
     # Default config
     default:
-    
+
       # Keep or not source pk columns on target database
       # TODO !! Not implemented yet!
       keep_source_pk_columns: false
-    
+
       # Default typecasting. Options:
       # tostring  => all unknow types are imported as string
       # discover  => try to discover the type if possible
       # TODO Mysql ok, e outros?
       typecasting: tostring
-    
+
       # Use or not MongoDBRef
       # if false, just store plain ID
       use_dbrefs: true
-    
+
       # Drop database before import
       # REALLY DANGER!!!
       drop_database_first: false
-    
-      # Tables to not import - usefull to ignore relation tables 
+
+      # Tables to not import - usefull to ignore relation tables
       # that will be referenced or embbeded
       # use [ ] and not { } !!
       ignore_tables: [ ]
-    
+
     # Database source, in a PDO Format, plus "driver" infor
     source:
       driver:   'mysql'
@@ -126,7 +136,7 @@ Read to understand the options.
       options:
        "PDO::MYSQL_ATTR_INIT_COMMAND": "SET NAMES utf8"
        "PDO::ATTR_PERSISTENT": true
-    
+
     # Target database, MongoDB format
     # but always inform "database" separated
     target:
@@ -138,30 +148,30 @@ Read to understand the options.
       options:
         persist: true
     #      replicaSet: false
-    
+
     tables:
-    
+
       # This is a sample table 'blog'
       blog:
         # target to migrate data. If ommited, default to table name
         collection_target: blog
-    
+
         # Primary key column(s). If
         # just on colunm
         pk_columns: id
         # multiple pk columns
         #pk_columns: []
-    
+
         # Keep or not source pk columns on target database (overrides default)
         # TODO !! Not implemented yet!
         keep_source_pk_columns: false
-     
+
         # Columns to ignore on migration
         # none
         ignore_columns: ~
         # or
         #ignore_columns: [birthday,obs]
-    
+
         # Mapping columns names and type
         # Format:
         # source_column_name: {name: target_column_name, source_type: date, target_type: date}
@@ -169,7 +179,7 @@ Read to understand the options.
         columns_map:
           author_name: { target_name: authorname, source_type: string, target_type: string }
           date_publish: { target_name: datepublish, source_type: date, target_type: date }
-    
+
         # Embbeding
         # TODO !! Not implemented yet!
         embeddeds: ~
@@ -177,7 +187,7 @@ Read to understand the options.
         # One to One Referencing
         one_references:
           author_id: { table: author, pk: id }
-    
+
         # One to Many Referencing
         many_references:
           readers:
@@ -195,3 +205,8 @@ runMongration.php is a interactive command line script. Run like this:
 
     cd PHPMongrantion
     lib/phpmongration/runDumper.php /FULL_PATH_TO_CONFIG_FILE/migration.yourdatabaes.yml
+
+## Article:
+
+An article with more info can be found in:
+<http://tech.rgou.net/en/mongodb/phpmongrator-migrando-de-rdbms-mysql-for-a-while-para-o-mongodb/>
