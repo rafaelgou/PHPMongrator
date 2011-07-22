@@ -140,7 +140,7 @@ abstract class PHPMongrationBaseDriver
       'keep_source_pk_columns' => false,
       'typecasting'            => 'tostring',
       'drop_database_first'    => false,
-      'use_dbrefs'             => true,
+      'reference_strategy'     => 'dbref',
       'ignore_tables'          => array(),
     );
 
@@ -333,16 +333,30 @@ abstract class PHPMongrationBaseDriver
                 $this->getFieldTargetName($reference_config['table'], $reference_config['fk']));
         foreach ($references as $pk_key => $_id)
         {
-          $ref = $this->migration_config['default']['use_dbrefs']
-                 ? MongoDBRef::create(
+          switch ($this->migration_config['default']['reference_strategy'])
+          {
+            case 'dbref':
+              $ref = MongoDBRef::create(
                      $this->getCollectionTarget($reference_config['table']),
                      $_id
-                   )
-                 : $_id;
-          $query = array($this->getFieldTargetName($table_config['collection_target'], $reference_name) => $pk_key);
+                   );
+              break;
+            case 'objectid':
+              $ref = $_id;
+              break;
+            case 'plain ':
+            default:
+              $ref = (string) $_id;
+              break;
+          }
+          $query = array($this->getFieldTargetName($table_config['table_name'], $reference_name) => $pk_key);
           $set = array('$set' =>
-              array( $this->getFieldTargetName($table_config['collection_target'], $reference_name) => $ref )
+              array( $this->getFieldTargetName($table_config['table_name'], $reference_name) => $ref )
               );
+//          $query = array($this->getFieldTargetName($table_config['collection_target'], $reference_name) => $pk_key);
+//          $set = array('$set' =>
+//              array( $this->getFieldTargetName($table_config['collection_target'], $reference_name) => $ref )
+//              );
           $this->getCollection($table_config['collection_target'])
                   ->update($query, $set, array("multiple" => true));
         }

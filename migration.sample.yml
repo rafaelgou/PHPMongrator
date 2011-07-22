@@ -11,9 +11,11 @@ default:
   # TODO Mysql ok, e outros?
   typecasting: tostring
 
-  # Use or not MongoDBRef
-  # if false, just store plain ID
-  use_dbrefs: true
+  # How to handle refereces
+  # dbref: use MongoDBRef
+  # objectid: use MongoId
+  # plain: use just string field
+  reference_strategy: dbref
 
   # Drop database before import
   # REALLY DANGER!!!
@@ -24,7 +26,7 @@ default:
   # use [ ] and not { } !!
   ignore_tables: [ ]
 
-# Database source, in a PDO Format, plus "driver" infor
+# Database source, in a PDO Format, plus "driver" info
 source:
   driver:   'mysql'
   dsn:      'mysql:host=localhost;dbname=sample'
@@ -54,7 +56,7 @@ tables:
     collection_target: blog
 
     # Primary key column(s). If
-    # just on colunm
+    # just one colunm
     pk_columns: id
     # multiple pk columns
     #pk_columns: []

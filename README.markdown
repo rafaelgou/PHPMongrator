@@ -114,9 +114,11 @@ Read to understand the options.
       # TODO Mysql ok, e outros?
       typecasting: tostring
 
-      # Use or not MongoDBRef
-      # if false, just store plain ID
-      use_dbrefs: true
+      # How to handle refereces
+      # dbref: use MongoDBRef
+      # objectid: use MongoId
+      # plain: use just string field
+      reference_strategy: dbref
 
       # Drop database before import
       # REALLY DANGER!!!
