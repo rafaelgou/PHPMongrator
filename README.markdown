@@ -1,4 +1,4 @@
-# PHPMigration
+# PHPMongrator
 
 PHP Classes and CLI scripts to migrate from RDBMSs (such as MySQL) to MongoDB
 
